@@ -183,7 +183,7 @@ Error Range:<br>
       <div class="modal-body">
 		<h5>Empty and zero inputs will not be used</h5>
 		<h5>Use <kbd>enter</kbd> and <kbd>tab</kbd> to navigate inputs</h5>
-		<h5>We've limited you to 12 inputs because this algorithm calculates at 3<sup>n</sup>, or in other words it gets three times slower every input. This is because we check every single combination of positive, negative, and zero for each input.</h5>
+		<h5>We've limited you to 10 inputs because this algorithm calculates at 3<sup>n</sup>, or in other words it gets three times slower every input. This is because we check every single combination of positive, negative, and zero for each input.</h5>
       </div> <!-- end modal body -->
     </div>
   </div>
@@ -270,8 +270,8 @@ function newRow() {
 
 
 	let tableSize = inputTable.children[0].children.length-1;
-	if(tableSize > 11) {
-		errorP.innerHTML = "maximum 12 rows";
+	if(tableSize > 9) {
+		errorP.innerHTML = "maximum 10 rows";
 		return;
 	}
 
