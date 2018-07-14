@@ -1,0 +1,479 @@
+
+<!-- 
+todo:
+
+is input verification/error checking all done?
+if first column isnt used and the next used one is positive it starts with a "+"
+
+add copy paste buttons to rows?
+add console?
+
+
+optimize math, and cache value of doc.getELement in window.onload so it doesnt keep getting it
+
+
+
+make look better:
+selection color, 
+night, fullscreen
+favicon
+loading symbol
+ -->
+
+<!doctype html>
+<html>
+<head>
+<title>Number Checker</title>
+<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<meta name="title=" content="Number Checker">
+  <!-- Chrome, Firefox OS and Opera -->
+  <meta id="metaColor1" name="theme-color" content="#ccc">
+  <!-- Windows Phone -->
+  <meta id="metaColor2" name="msapplication-navbutton-color" content="#ccc">
+  <!-- iOS Safari -->
+  <meta id="metaColor3" name="apple-mobile-web-app-status-bar-style" content="#ccc">
+
+
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+
+<style>
+
+* {
+	text-align: center !important;
+
+}
+
+.btn-group {
+	margin-top: 10px;
+}
+
+::-moz-selection {
+  background: #ccc;
+}
+::selection {
+  background: #ccc;
+}
+
+img, button, br {
+  user-drag: none; 
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
+.bg-warning, .bg-success{
+  display:inline-block;
+  padding: 5px;
+}
+.bg-warning:empty, .bg-success:empty { /*remove highlight if no text*/
+  background-color: transparent;
+}
+
+
+input[type=checkbox] {
+	width: 16px;
+	height: 16px;
+}
+
+#answerP {
+	font-size: 150%;
+}
+
+th {
+	background-color: #eee;
+}
+
+
+
+</style>
+
+</head>
+<body>
+
+<h3 style="text-align:center;">Do the numbers add up?</h3>
+<h5>Enter a list of numbers below</h5>
+
+<div class="btn-group">
+<button type="button" tabindex="-1" class="btn btn-default" data-toggle="modal" data-target="#infoModal" title="Open Info">
+  <i class="material-icons">info</i>Info
+</button>
+
+<button type="button" tabindex="-1" class="btn btn-default" data-toggle="modal" data-target="#settingsModal" title="Open Settings">
+  <i class="material-icons">settings</i>Settings
+</button>
+
+<button type="button" tabindex="-1" class="btn btn-default" title="Contact" onclick="window.open('mailto:justingolden@rgbstudios.org?subject=Number%20Checker')">
+  <i class="material-icons">email</i>Contact
+</button>
+</div>
+
+<br>
+
+<div class="btn-group">
+<button class="btn-success btn-xs btn" title="New Row" tabindex="-1" onclick="newRow()">New Row<br><i class="material-icons">add</i></button>
+<button class="btn-warning btn-xs btn" title="Clear All" tabindex="-1" onclick="clearAll()">Clear All<br><i class="material-icons">clear</i></button>
+<button class="btn-danger btn-xs btn" title="Delete All" tabindex="-1" onclick="deleteAll()">Delete All<br><i class="material-icons">delete_sweep</i></button>
+<button class="btn-info btn-xs btn" title="Autofill Names" tabindex="-1" onclick="fillNames()">Autofill Names<br><i class="material-icons">sort_by_alpha</i></button>
+</div>
+
+
+<div class="container">
+<table class="table table-bordered table-hover table-condensed" id="inputTable">
+	<tr>
+		<th>Number</th>
+		<th>Name</th>
+		<th>Delete</th>
+	</tr>
+	<tr>
+		<td><input autofocus value="2" type="number"></td>
+		<td><input value="A"></td>
+		<td><button class="btn btn-xs btn-danger" tabindex="-1" onclick="deleteRow(this)"><i class="material-icons">delete_outline</i></button></td>
+	</tr>
+	<tr>
+		<td><input value="4" type="number"></td>
+		<td><input value="B"></td>
+		<td><button class="btn btn-xs btn-danger" tabindex="-1" onclick="deleteRow(this)"><i class="material-icons">delete_outline</i></button></td>
+	</tr>
+	<tr>
+		<td><input value="3" type="number"></td>
+		<td><input value="C"></td>
+		<td><button class="btn btn-xs btn-danger" tabindex="-1" onclick="deleteRow(this)"><i class="material-icons">delete_outline</i></button></td>
+	</tr>
+</table>
+</div>
+
+
+<p class="bg-warning" id="errorP"></p>
+
+<br>
+<!-- <textarea autofocus rows="10" id="numbersInput"></textarea><br> -->
+Expected Result:<br>
+<input id="resultInput" type="number" value="5"></input><br>
+Error Range:<br>
+<input id="rangeInput" type="number" value="0"></input><br>
+<br>
+<button class="btn btn-lg btn-success" title="Find Answers" type="submit" onclick="doMath()">Find Answers<br><i class="material-icons">search</i></button>
+<br><hr>
+<p class="bg-success" id="answerP"></p>
+
+
+
+
+
+
+<!-- info modal -->
+<div class="modal fade" id="infoModal" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h3 class="modal-title"><i class="material-icons">info</i>Info</h3>
+      </div>
+      <div class="modal-body">
+		<h5>Empty and zero inputs will not be used</h5>
+		<h5>Use <kbd>enter</kbd> and <kbd>tab</kbd> to navigate inputs</h5>
+		<h5>We've limited you to 12 inputs because this algorithm calculates at 3<sup>n</sup>, or in other words it gets three times slower every input. This is because we check every single combination of positive, negative, and zero for each input.</h5>
+      </div> <!-- end modal body -->
+    </div>
+  </div>
+</div> <!-- end modal -->
+
+<!-- settings modal -->
+<div class="modal fade" id="settingsModal" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h3 class="modal-title"><i class="material-icons">settings</i>Settings</h3>
+      </div>
+      <div class="modal-body">
+		<div class="checkbox">
+			<label class="checkbox-inline"><input id="nameCheckbox" checked tabindex="-1" onchange="setNames(this.checked)" type="checkbox">Name Column</label>
+		</div>
+
+
+      </div> <!-- end modal body -->
+    </div>
+  </div>
+</div> <!-- end modal -->
+
+
+<script>
+let nums = [], names = [];
+
+let inputTable, nameCheckbox, errorP, answerP;
+
+window.onload = function() {
+	inputTable = document.getElementById("inputTable");	
+	nameCheckbox = document.getElementById("nameCheckbox");
+	errorP = document.getElementById("errorP");
+	answerP = document.getElementById("answerP");
+}
+
+window.onkeyup = function(e) {
+   var key = e.keyCode ? e.keyCode : e.which;
+
+   //if enter keys and active element is input insize a td
+   if (key == 13 && document.activeElement.tagName == "INPUT" && document.activeElement.parentElement.tagName == "TD" && document.activeElement.type != "checkbox") {
+
+
+		let tableSize = inputTable.children[0].children.length-1;
+
+
+       	let inputs = document.getElementsByTagName("input");
+
+       	inputs = Object.values(inputs);
+
+       	inputs = inputs.filter(function(item) {
+    		return item.parentElement.tagName == "TD" && item.parentElement.style.display != "none";
+		});
+
+
+       	let len = nameCheckbox.checked ? tableSize*2 : tableSize;
+
+       	for(let i=0; i<len; i++) {
+       		if(inputs[i] == document.activeElement) {
+       			//make i idx of next active input
+       			if(i==len-1) {
+       				newRow();
+       			}
+       			else {	
+       				inputs[i+1].focus();
+       				inputs[i+1].select();
+       			}	
+       			break;
+       		}
+       	}
+
+       
+   }
+}
+
+function deleteRow(button) {
+	button.parentElement.parentElement.remove();
+}
+
+function newRow() {
+
+
+
+
+	let tableSize = inputTable.children[0].children.length-1;
+	if(tableSize > 11) {
+		errorP.innerHTML = "maximum 12 rows";
+		return;
+	}
+
+
+	let tr = document.createElement("tr");
+	let td1 = document.createElement("td");
+	let input1 = document.createElement("input");
+	input1.type = "number";
+	let td2 = document.createElement("td");
+	let input2 = document.createElement("input");
+	let td3 = document.createElement("td");
+	let button = document.createElement("button");
+	button.onclick = function() {
+		this.parentNode.parentNode.remove();
+	}
+	button.innerHTML = "<i class='material-icons'>delete_outline</i>";
+	button.className = "btn btn-xs btn-danger";
+	button.tabIndex = "-1";
+	td1.appendChild(input1);
+	td2.appendChild(input2);
+	td3.appendChild(button);
+	tr.appendChild(td1);
+	tr.appendChild(td2);
+	tr.appendChild(td3);
+	inputTable.children[0].appendChild(tr);
+
+	//update display
+	setNames(nameCheckbox.checked);
+}
+
+function getInputs() {
+	let tableSize = inputTable.children[0].children.length-1;
+
+	nums = [], names = [];
+
+	for(let i=0; i<tableSize; i++) {
+		let num =  inputTable.children[0].children[i+1].children[0].children[0].value;
+		let name = inputTable.children[0].children[i+1].children[1].children[0].value;
+
+		if(!isNaN(num) && num != "") {
+			nums.push(num);
+			names.push(name);
+		}
+	}
+}
+
+
+function clearAll() {
+	let tableSize = inputTable.children[0].children.length-1;
+	
+	for(let i=0; i<tableSize; i++) {
+		inputTable.children[0].children[i+1].children[0].children[0].value = "";
+		inputTable.children[0].children[i+1].children[1].children[0].value = "";
+	}
+}
+
+function deleteAll() {
+	let tableSize = inputTable.children[0].children.length-1;
+	
+	for(let i=0; i<tableSize; i++) {
+		inputTable.children[0].children[1].remove(); //index 1 because indecies decrease after removing. index 0 is th
+	}	
+}
+
+function setNames(checked) {
+	let tableSize = inputTable.children[0].children.length-1;
+	
+	for(let i=0; i<tableSize; i++) {
+		inputTable.children[0].children[i+1].children[1].children[0].tabIndex = checked ? "" : "-1";
+		inputTable.children[0].children[i+1].children[1].style.display = checked ? "" : "none";
+	}
+	//th
+	inputTable.children[0].children[0].children[1].style.display = checked ? "" : "none";
+
+}
+
+function fillNames() {
+	let tableSize = inputTable.children[0].children.length-1;
+
+	alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
+	
+	for(let i=0; i<tableSize && i<alphabet.length; i++) {
+		inputTable.children[0].children[i+1].children[1].children[0].value = alphabet[i];
+	}
+
+}
+
+
+
+function doMath() {
+
+	errorP.innerHTML = "";
+	answerP.innerHTML = "";
+
+	answerOperations = [];
+	answerResults = [];
+
+	getInputs();
+	numbers = nums;
+	console.log(nums);
+	
+	let goalResult = parseFloat(document.getElementById("resultInput").value);
+	let range = parseFloat(document.getElementById("rangeInput").value);
+
+
+	if(numbers.length < 2) {
+		errorP.innerHTML = "please enter more than one number";
+		return;
+	}
+	if(isNaN(goalResult) || isNaN(range) ) {
+		errorP.innerHTML = "please enter an expected result and error range";
+		return;
+	}
+
+
+	let operations = ""; //0 is none, 1 is -, 2 is +
+	//start with 1s
+	for(let i = 0, n = numbers.length; i < n; i++) {
+		operations += "0";
+	}
+	
+	let currentResult;
+	let found = false;
+	let done = false;
+	let foundAnswer = 0;
+
+	while(!done) {
+		currentResult = 0;
+		for(let i=0; i<numbers.length; i++) { //try current operations
+			currentResult += parseFloat(convertNumOperation(numbers[i], operations[i]) );
+		}
+
+		if(inRange(goalResult, range, currentResult)) {
+			found = true;
+			foundAnswer = currentResult;
+			answerOperations.push(operations);
+			answerResults.push(currentResult);
+		}
+
+		//check if we're done. must happen before not after going to next combination
+			if(operations == "2".repeat(numbers.length) ) {//only 2s
+				done = true;
+			}
+
+
+		 //go to next operation combination
+			let size = operations.length;
+			
+			//operations is stored as base 3 string, convert to base 10 integer, increment, then convert back to base 3 string.
+			operations = (parseInt(operations, 3) + 1).toString(3); 
+
+			operations = pad(operations, size);
+		
+	}
+
+
+	answerP.innerHTML += answerOperations.length + " answer" + (answerOperations.length != 1 ? "s":"") + " found<br>";
+
+	for(let i=0; i<answerOperations.length; i++) {
+		let answerText = "";
+
+		let numOp = convertNumOperation(numbers[0], answerOperations[i][0]);
+		if(numOp != 0) {
+			answerText += numOp;
+			if(nameCheckbox.checked) {
+				answerText += " (" + names[0] + ")";
+			}
+		}
+
+		for(let j = 1; j < numbers.length; j++) {
+			numOp = convertNumOperation(numbers[j], answerOperations[i][j]);
+			answerText += (numOp == 0 ? "" : numOp < 0 ? " - " + Math.abs(numOp) : " + " + numOp);
+			if(nameCheckbox.checked && numOp != 0) {
+				answerText += " (" + names[j] + ")";
+			}
+		}
+		answerText += " = " + answerResults[i];
+
+		answerP.innerHTML += answerText + "<br>";
+	}
+
+}
+
+
+function pad(n, width) {
+  n = n + '';
+  return n.length >= width ? n : new Array(width - n.length + 1).join("0") + n;
+}
+
+function convertNumOperation(num, operation) {
+	//0 is none, 1 is -, 2 is +
+	if(operation == "0")
+		return 0;
+	if(operation == "1")
+		return -1*num;
+	else
+		return num;
+}
+
+function inRange(goalResult, range, currentResult) {
+	return goalResult + range >= currentResult && goalResult - range <= currentResult;
+}
+</script>
+</body>
+</html>
