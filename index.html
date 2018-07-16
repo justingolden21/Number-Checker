@@ -413,19 +413,19 @@ function doMath() {
 		}
 
 		//check if we're done. must happen before not after going to next combination
-			if(operations == "2".repeat(numbers.length) ) {//only 2s
-				done = true;
-			}
+
+		//"2".repeat(numbers.length) didn't work in IE because repeat() isn't supported
+		if(operations == new Array(numbers.length+1).join("2") ) {//only 2s
+			done = true;
+		}
 
 
 		 //go to next operation combination
-			let size = operations.length;
+		let size = operations.length;
 			
-			//operations is stored as base 3 string, convert to base 10 integer, increment, then convert back to base 3 string.
-			operations = (parseInt(operations, 3) + 1).toString(3); 
-
-			operations = pad(operations, size);
-		
+		//operations is stored as base 3 string, convert to base 10 integer, increment, then convert back to base 3 string.
+		operations = (parseInt(operations, 3) + 1).toString(3);
+		operations = pad(operations, size);
 	}
 
 
