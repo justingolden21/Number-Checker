@@ -136,18 +136,18 @@ th {
 		<th>Delete</th>
 	</tr>
 	<tr>
-		<td><input autofocus value="2" type="number"></td>
-		<td><input value="A"></td>
+		<td><input class="form-control" autofocus value="2" type="number"></td>
+		<td><input class="form-control" value="A"></td>
 		<td><button class="btn btn-xs btn-danger" tabindex="-1" onclick="deleteRow(this)"><i class="material-icons">delete_outline</i></button></td>
 	</tr>
 	<tr>
-		<td><input value="4" type="number"></td>
-		<td><input value="B"></td>
+		<td><input class="form-control" value="4" type="number"></td>
+		<td><input class="form-control" value="B"></td>
 		<td><button class="btn btn-xs btn-danger" tabindex="-1" onclick="deleteRow(this)"><i class="material-icons">delete_outline</i></button></td>
 	</tr>
 	<tr>
-		<td><input value="3" type="number"></td>
-		<td><input value="C"></td>
+		<td><input class="form-control" value="3" type="number"></td>
+		<td><input class="form-control" value="C"></td>
 		<td><button class="btn btn-xs btn-danger" tabindex="-1" onclick="deleteRow(this)"><i class="material-icons">delete_outline</i></button></td>
 	</tr>
 </table>
@@ -159,9 +159,9 @@ th {
 <br>
 <!-- <textarea autofocus rows="10" id="numbersInput"></textarea><br> -->
 Expected Result:<br>
-<input id="resultInput" type="number" value="5"></input><br>
+<input id="resultInput" class="form-control" type="number" value="5"></input><br>
 Error Range:<br>
-<input id="rangeInput" type="number" value="0"></input><br>
+<input id="rangeInput" class="form-control" type="number" value="0"></input><br>
 <br>
 <button class="btn btn-lg btn-success" title="Find Answers" type="submit" onclick="doMath()">Find Answers<br><i class="material-icons">search</i></button>
 <br><hr>
@@ -281,8 +281,10 @@ function newRow() {
 	let td1 = document.createElement("td");
 	let input1 = document.createElement("input");
 	input1.type = "number";
+	input1.className = "form-control";
 	let td2 = document.createElement("td");
 	let input2 = document.createElement("input");
+	input2.className = "form-control";
 	let td3 = document.createElement("td");
 	let button = document.createElement("button");
 	button.onclick = function() {
