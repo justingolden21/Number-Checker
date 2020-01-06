@@ -49,7 +49,9 @@ loading symbol
 
 * {
 	text-align: center !important;
-
+}
+body {
+	margin: 20px;
 }
 
 .btn-group {
@@ -80,7 +82,6 @@ img, button, br {
   background-color: transparent;
 }
 
-
 input[type=checkbox] {
 	width: 16px;
 	height: 16px;
@@ -93,8 +94,6 @@ input[type=checkbox] {
 th {
 	background-color: #eee;
 }
-
-
 
 </style>
 
@@ -167,11 +166,6 @@ Error Range:<br>
 <br><hr>
 <p class="bg-success" id="answerP"></p>
 
-
-
-
-
-
 <!-- info modal -->
 <div class="modal fade" id="infoModal" role="dialog">
   <div class="modal-dialog">
@@ -203,7 +197,6 @@ Error Range:<br>
 			<label class="checkbox-inline"><input id="nameCheckbox" checked tabindex="-1" onchange="setNames(this.checked)" type="checkbox">Name Column</label>
 		</div>
 
-
       </div> <!-- end modal body -->
     </div>
   </div>
@@ -228,9 +221,7 @@ window.onkeyup = function(e) {
    //if enter keys and active element is input insize a td
    if (key == 13 && document.activeElement.tagName == "INPUT" && document.activeElement.parentElement.tagName == "TD" && document.activeElement.type != "checkbox") {
 
-
 		let tableSize = inputTable.children[0].children.length-1;
-
 
        	let inputs = document.getElementsByTagName("input");
 
@@ -266,16 +257,11 @@ function deleteRow(button) {
 }
 
 function newRow() {
-
-
-
-
 	let tableSize = inputTable.children[0].children.length-1;
 	if(tableSize > 9) {
 		errorP.innerHTML = "maximum 10 rows";
 		return;
 	}
-
 
 	let tr = document.createElement("tr");
 	let td1 = document.createElement("td");
@@ -321,7 +307,6 @@ function getInputs() {
 	}
 }
 
-
 function clearAll() {
 	let tableSize = inputTable.children[0].children.length-1;
 	
@@ -359,13 +344,9 @@ function fillNames() {
 	for(let i=0; i<tableSize && i<alphabet.length; i++) {
 		inputTable.children[0].children[i+1].children[1].children[0].value = alphabet[i];
 	}
-
 }
 
-
-
 function doMath() {
-
 	errorP.innerHTML = "";
 	answerP.innerHTML = "";
 
@@ -379,7 +360,6 @@ function doMath() {
 	let goalResult = parseFloat(document.getElementById("resultInput").value);
 	let range = parseFloat(document.getElementById("rangeInput").value);
 
-
 	if(numbers.length < 2) {
 		errorP.innerHTML = "please enter more than one number";
 		return;
@@ -388,7 +368,6 @@ function doMath() {
 		errorP.innerHTML = "please enter an expected result and error range";
 		return;
 	}
-
 
 	let operations = ""; //0 is none, 1 is -, 2 is +
 	//start with 1s
@@ -421,15 +400,13 @@ function doMath() {
 			done = true;
 		}
 
-
-		 //go to next operation combination
+		//go to next operation combination
 		let size = operations.length;
 			
 		//operations is stored as base 3 string, convert to base 10 integer, increment, then convert back to base 3 string.
 		operations = (parseInt(operations, 3) + 1).toString(3);
 		operations = pad(operations, size);
 	}
-
 
 	answerP.innerHTML += answerOperations.length + " answer" + (answerOperations.length != 1 ? "s":"") + " found<br>";
 
@@ -457,7 +434,6 @@ function doMath() {
 	}
 
 }
-
 
 function pad(n, width) {
   n = n + '';
