@@ -36,8 +36,6 @@ loading symbol
   <!-- iOS Safari -->
   <meta id="metaColor3" name="apple-mobile-web-app-status-bar-style" content="#ccc">
 
-
-
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -82,9 +80,56 @@ img, button, br {
   background-color: transparent;
 }
 
+/* https://material.io/resources/color/#!/?view.left=0&view.right=0&primary.color=00695C */
+/* btn colors */
+.btn {
+	border: 2px solid #fff !important;
+	border-radius: 10px;
+}
+.btn-default {
+/*	border-color: #333 !important;
+	margin: 2px;*/
+	box-shadow: 2px 2px 0px #ccc;
+	border-radius: 0px;
+}
+.btn-success, .btn-success:active {
+	background-color: #00796b !important;
+}
+.btn-success:hover, .btn-success:focus {
+	background-color: #00897b !important;
+}
+.btn-warning, .btn-warning:active {
+	background-color: #f9a825 !important;
+}
+.btn-warning:hover, .btn-warning:focus {
+	background-color: #fbc02d !important;
+}
+.btn-danger, .btn-danger:active {
+	background-color: #c62828 !important;
+}
+.btn-danger:hover, .btn-danger:focus {
+	background-color: #e53935 !important;
+}
+.btn-info, .btn-info:active {
+	background-color: #283593 !important;
+}
+.btn-info:hover, .btn-info:focus {
+	background-color: #3949ab !important;
+}
+
+.btn-xs.btn-danger {
+	border-radius: 0px;
+}
+
 input[type=checkbox] {
 	width: 16px;
 	height: 16px;
+}
+
+input[type=number], input[type=text] {
+	border-radius: 0px;
+	box-shadow: none !important;
+	border-width: 2px;
 }
 
 #answerP {
@@ -136,17 +181,17 @@ th {
 	</tr>
 	<tr>
 		<td><input class="form-control" autofocus value="2" type="number"></td>
-		<td><input class="form-control" value="A"></td>
+		<td><input class="form-control" type="text" value="A"></td>
 		<td><button class="btn btn-xs btn-danger" tabindex="-1" onclick="deleteRow(this)"><i class="material-icons">delete_outline</i></button></td>
 	</tr>
 	<tr>
 		<td><input class="form-control" value="4" type="number"></td>
-		<td><input class="form-control" value="B"></td>
+		<td><input class="form-control" type="text" value="B"></td>
 		<td><button class="btn btn-xs btn-danger" tabindex="-1" onclick="deleteRow(this)"><i class="material-icons">delete_outline</i></button></td>
 	</tr>
 	<tr>
 		<td><input class="form-control" value="3" type="number"></td>
-		<td><input class="form-control" value="C"></td>
+		<td><input class="form-control" type="text" value="C"></td>
 		<td><button class="btn btn-xs btn-danger" tabindex="-1" onclick="deleteRow(this)"><i class="material-icons">delete_outline</i></button></td>
 	</tr>
 </table>
@@ -162,7 +207,7 @@ Expected Result:<br>
 Error Range:<br>
 <input id="rangeInput" class="form-control" type="number" value="0"></input><br>
 <br>
-<button class="btn btn-lg btn-success" title="Find Answers" type="submit" onclick="doMath()">Find Answers<br><i class="material-icons">search</i></button>
+<button class="btn btn-lg btn-success" title="Find Answers" type="submit" onclick="doMath()">Find Answers <i class="material-icons">search</i></button>
 <br><hr>
 <p class="bg-success" id="answerP"></p>
 
@@ -270,6 +315,7 @@ function newRow() {
 	input1.className = "form-control";
 	let td2 = document.createElement("td");
 	let input2 = document.createElement("input");
+	input2.type = "text";
 	input2.className = "form-control";
 	let td3 = document.createElement("td");
 	let button = document.createElement("button");
